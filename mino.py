@@ -109,6 +109,7 @@ def solve(
         calculated_str_set: Set[str], solved_str_set: Set[str],
         left_top_filled_cells: List[Tuple[int, int]],
         representative_left_dict: Dict[str, int],
+        maximum_mino_count: int,
         mino_representative_list: List[str],
         representative_to_ss_mino_list: Dict[str, List[Tuple[Set[Tuple[int, int]], Tuple[int, int], str]]],
         representative_to_num: Dict[str, int],
@@ -119,8 +120,8 @@ def solve(
     if count == 0:
         exact_placed_dict: Dict[int, List[Tuple[int, int]]] = {}
         for i in range(len(key_to_num)):
-            for j in range(2):
-                temp_position = (i * 2 + j) * 2
+            for j in range(maximum_mino_count):
+                temp_position = (i * maximum_mino_count + j) * 2
                 if placed_normal_list[temp_position] != -1:
                     if i not in exact_placed_dict:
                         exact_placed_dict[i] = []
@@ -168,23 +169,24 @@ def solve(
                                 next_left_top_filled_cells.append((temp_x, temp_y + 1))
                         key_num = key_to_num[key]
                         i = -1
-                        while (i := i + 1) < 2:
-                            temp_position = (key_num * 2 + i) * 2
+                        while (i := i + 1) < maximum_mino_count:
+                            temp_position = (key_num * maximum_mino_count + i) * 2
                             if placed_normal_list[temp_position] == -1:
                                 placed_normal_list[temp_position] = cell_x - diff[0]
                                 placed_normal_list[temp_position + 1] = cell_y - diff[1]
-                                i = 2
+                                i = maximum_mino_count
                         representative_left_dict[representative] -= 1
                         count -= len(ss_mino)
                         solve(
                             board, count, placed_normal_list, calculated_str_set, solved_str_set,
-                            next_left_top_filled_cells, representative_left_dict, mino_representative_list,
-                            representative_to_ss_mino_list, representative_to_num, key_to_num)
+                            next_left_top_filled_cells, representative_left_dict, maximum_mino_count,
+                            mino_representative_list, representative_to_ss_mino_list,
+                            representative_to_num, key_to_num)
                         count += len(ss_mino)
                         representative_left_dict[representative] += 1
-                        i = 2
+                        i = maximum_mino_count
                         while (i := i - 1) > -1:
-                            temp_position = (key_num * 2 + i) * 2
+                            temp_position = (key_num * maximum_mino_count + i) * 2
                             if placed_normal_list[temp_position] != -1:
                                 placed_normal_list[temp_position] = -1
                                 placed_normal_list[temp_position + 1] = -1
@@ -244,8 +246,9 @@ def solve_tetromino_puzzle(
     count = sum([len([cell for cell in row if cell == 0]) for row in board])
     left_top_filled_cells = [(padding, padding)]
     representative_left_dict = {representative: 2 for representative in mino_representative_list}
-    # coordinate x and y -> 2, each mino's count -> 2
-    placed_normal_list = [-1] * len(key_to_representative) * 2 * max(list(representative_left_dict.values()))
+    maximum_mino_count = max(list(representative_left_dict.values()))
+    # coordinate x and y -> 2, each mino's count -> maximum_mino_count
+    placed_normal_list = [-1] * len(key_to_representative) * 2 * maximum_mino_count
     calculated_str_set: Set[str] = set()
     solved_str_set: Set[str] = set()
 
@@ -258,6 +261,7 @@ def solve_tetromino_puzzle(
             solved_str_set,
             left_top_filled_cells,
             representative_left_dict,
+            maximum_mino_count,
             mino_representative_list,
             representative_to_ss_mino_list,
             representative_to_num,
