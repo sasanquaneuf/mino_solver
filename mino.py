@@ -3,7 +3,7 @@ from typing import List, Tuple, Set, Dict
 from pprint import pprint
 from json import loads
 
-debug = True
+debug = False
 
 
 def normalize(mino: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
@@ -303,6 +303,17 @@ def solve_tetromino_puzzle(
 
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Solve tetromino puzzle.')
+    parser.add_argument(
+        '--debug', dest='debug', action='store_const',
+        const=True, default=False,
+        help='run as debug mode(default: off)')
+    args = parser.parse_args()
+    debug = args.debug
     print('This process may use 16GB of memory...')
+    if not debug:
+        print('If you want to watch detail, please set argument "--debug".')
     pattern_number = solve_tetromino_puzzle()
     print(pattern_number)
