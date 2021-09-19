@@ -195,6 +195,7 @@ def solve(
                             board[cell_y + dy][cell_x + dx] = 0
 
 
+
 def rotate_board(board: List[List[int]]) -> List[List[int]]:
     return [[cell for cell in row[::-1]] for row in board[::-1]]
 
@@ -204,7 +205,7 @@ def reverse_board(board: List[List[int]]) -> List[List[int]]:
 
 
 def solve_tetromino_puzzle(
-        output_placement_data: bool = True, reduce_symmetric_data: bool = True, file_name: str = 'result.txt') -> int:
+        output_placement_data: bool = True, reduce_symmetric_data: bool = True, file_name: str = 'result.txt'):
     mino_representative_list: List[str] = []
     key_to_representative: Dict[str, str] = {}
     key_to_mino: Dict[str, Set[Tuple[int, int]]] = {}
