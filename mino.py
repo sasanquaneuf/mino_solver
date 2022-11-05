@@ -6,7 +6,7 @@ from json import loads
 debug = False
 
 
-def normalize(mino: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
+def normalize(mino: Set[Tuple[int, int]]):
     min_x = min([x for x, _ in mino])
     min_y = min([y for _, y in mino])
     return {(x - min_x, y - min_y) for x, y in mino}
