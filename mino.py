@@ -13,7 +13,7 @@ def normalize(mino: Set[Tuple[int, int]]):
 
 
 def rotate(mino: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
-    return {(-y, x) for x, y in mino}
+    return  {(-y, x) for x, y in mino}
 
 
 def reverse(mino: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
